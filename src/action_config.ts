@@ -1,3 +1,4 @@
+require('dotenv').config();
 export interface ActionConfig {
   github_token: string
   repo: string

@@ -1,7 +1,9 @@
-import {Branch} from './GitHubRepository'
+import { Branch } from "./GitHubRepository";
+import { GithubPullRequest } from "./GitHubPullRequest";
 
 export interface GitHubRepositoryRepository {
-  branches(): Promise<Branch[]>
-  mergedBranches(branches: Branch[]): Promise<string[]>
-  deleteBranches(branches: string[]): Promise<void>
+  branches(): Promise<Branch[]>;
+  mergedBranches(branches: Branch[], pullRequests: GithubPullRequest[]): Branch[];
+  deleteBranches(branches: Branch[]): Promise<void>;
+  listPullRequests(): Promise<GithubPullRequest[]>;
 }
