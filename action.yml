@@ -1,11 +1,12 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Merged branches cleaner'
+description: 'Removes all the branches that were already merged'
+author: 'Miguel Angel Moreno Regalado'
 inputs:
-  milliseconds: # change this
+  GITHUB_TOKEN:
+    description: 'GitHub token'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  ignore_branches:
+    description: 'Protect those branches that you dont want to be deleted'
 runs:
   using: 'node16'
   main: 'dist/index.js'
