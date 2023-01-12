@@ -148,9 +148,9 @@ function run({ repository }) {
     });
 }
 function ignoreBranches() {
-    const defaultBranches = ["master", "main"];
+    const defaultBranches = ['master', 'main'];
     try {
-        const customBranches = yaml.load(core.getInput("ignore_branches"));
+        const customBranches = yaml.load(core.getInput('ignore_branches'));
         if (!customBranches) {
             return defaultBranches;
         }
@@ -163,7 +163,7 @@ function ignoreBranches() {
     }
 }
 const repository = new GitHubApiGitHubRepositoryRepository_1.GitHubApiGitHubRepositoryRepository({
-    token: core.getInput("GITHUB_TOKEN"),
+    token: core.getInput('GITHUB_TOKEN'),
     ignoreBranches: ignoreBranches()
 });
 run({ repository });
