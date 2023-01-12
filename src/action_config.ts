@@ -1,7 +1,7 @@
 export interface ActionConfig {
-  github_token: string;
-  repo: string;
-  owner: string;
+  github_token: string
+  repo: string
+  owner: string
 }
 
 export const config: ActionConfig = {
