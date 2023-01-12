@@ -1,19 +1,46 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as yaml from 'js-yaml'
 
-async function run(): Promise<void> {
+import {GitHubApiGitHubRepositoryRepository} from './infrastructure/GitHubApiGitHubRepositoryRepository'
+import {GitHubRepositoryRepository} from './domain/GitHubRepositoryRepository'
+
+async function run({
+  repository
+}: {
+  repository: GitHubRepositoryRepository
+}): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    const branches = await repository.branches()
+    const mergedBranches = await repository.mergedBranches(branches)
+    repository.deleteBranches(mergedBranches)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
-run()
+function ignoreBranches(): string[] {
+  const defaultBranches: string[] = ['master', 'main']
+
+  try {
+    const customBranches = yaml.load(
+      core.getInput('ignore_branches')
+    ) as string[]
+
+    if (!customBranches) {
+      return defaultBranches
+    }
+
+    return [...defaultBranches, ...customBranches]
+  } catch (error) {
+    if (error instanceof Error) core.setFailed(error.message)
+
+    return defaultBranches
+  }
+}
+
+const repository = new GitHubApiGitHubRepositoryRepository({
+  token: core.getInput('GITHUB_TOKEN'),
+  ignoreBranches: ignoreBranches()
+})
+
+run({repository})
