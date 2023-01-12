@@ -1,5 +1,5 @@
-import {GitHubRepositoryRepository} from '../domain/GitHubRepositoryRepository'
 import * as github from '@actions/github'
+import {GitHubRepositoryRepository} from '../domain/GitHubRepositoryRepository'
 import {Branch} from '../domain/GitHubRepository'
 
 export class GitHubApiGitHubRepositoryRepository
@@ -8,18 +8,18 @@ export class GitHubApiGitHubRepositoryRepository
   private gitHub
   private repo: string
   private owner: string
-  private ignoreBranches: string[]
 
   constructor({
     token,
-    ignoreBranches
+    repo,
+    owner,
   }: {
-    token: string
-    ignoreBranches: string[]
+    token: string,
+    repo: string,
+    owner: string,
   }) {
-    this.repo = github.context.repo.repo
-    this.owner = github.context.repo.owner
-    this.ignoreBranches = ignoreBranches
+    this.repo = repo
+    this.owner = owner
     this.gitHub = github.getOctokit(token)
   }
 
@@ -44,17 +44,10 @@ export class GitHubApiGitHubRepositoryRepository
     )) as string[]
   }
 
-  filterWithoutNullsAndIgnoredBranches(branches: string[]): string[] {
-    return branches
-      .filter(branch => branch !== null)
-      .filter(branch => !this.ignoreBranches.includes(branch))
-  }
-
   async deleteBranches(branches: string[]): Promise<void> {
-    const branchesToDelete = this.filterWithoutNullsAndIgnoredBranches(branches)
     const {owner, repo} = this
 
-    for (const branch of branchesToDelete) {
+    for (const branch of branches) {
       await this.gitHub.rest.git.deleteRef({
         owner,
         repo,

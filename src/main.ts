@@ -1,18 +1,22 @@
-import * as core from '@actions/core'
-import * as yaml from 'js-yaml'
+import * as core from "@actions/core";
+import * as yaml from "js-yaml";
+import * as github from "@actions/github";
 
-import {GitHubApiGitHubRepositoryRepository} from './infrastructure/GitHubApiGitHubRepositoryRepository'
-import {GitHubRepositoryRepository} from './domain/GitHubRepositoryRepository'
+import { GitHubApiGitHubRepositoryRepository } from "./infrastructure/GitHubApiGitHubRepositoryRepository";
+import { CleanerBranches } from "./application/CleanerBranches";
+import { config } from "./action_config";
 
-async function run({
-  repository
-}: {
-  repository: GitHubRepositoryRepository
-}): Promise<void> {
+async function run(): Promise<void> {
   try {
-    const branches = await repository.branches()
-    const mergedBranches = await repository.mergedBranches(branches)
-    repository.deleteBranches(mergedBranches)
+    const repository = new GitHubApiGitHubRepositoryRepository({
+      token: core.getInput('GITHUB_TOKEN') || config.github_token,
+      repo: github.context.repo.repo || config.repo,
+      owner: github.context.repo.owner || config.owner
+    })
+
+    const cleaner = new CleanerBranches(repository)
+    cleaner.run({ignoredBranches: ignoreBranches()})
+
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
@@ -38,9 +42,4 @@ function ignoreBranches(): string[] {
   }
 }
 
-const repository = new GitHubApiGitHubRepositoryRepository({
-  token: core.getInput('GITHUB_TOKEN'),
-  ignoreBranches: ignoreBranches()
-})
-
-run({repository})
+run();
