@@ -1,10 +1,10 @@
-import * as core from "@actions/core";
-import * as yaml from "js-yaml";
-import * as github from "@actions/github";
+import * as core from '@actions/core'
+import * as yaml from 'js-yaml'
+import * as github from '@actions/github'
 
-import { GitHubApiGitHubRepositoryRepository } from "./infrastructure/GitHubApiGitHubRepositoryRepository";
-import { CleanerBranches } from "./application/CleanerBranches";
-import { config } from "./action_config";
+import {GitHubApiGitHubRepositoryRepository} from './infrastructure/GitHubApiGitHubRepositoryRepository'
+import {CleanerBranches} from './application/CleanerBranches'
+import {config} from './action_config'
 
 async function run(): Promise<void> {
   try {
@@ -16,7 +16,6 @@ async function run(): Promise<void> {
 
     const cleaner = new CleanerBranches(repository)
     cleaner.run({ignoredBranches: ignoreBranches()})
-
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
@@ -42,4 +41,4 @@ function ignoreBranches(): string[] {
   }
 }
 
-run();
+run()

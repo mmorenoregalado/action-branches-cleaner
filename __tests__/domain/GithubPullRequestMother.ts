@@ -1,22 +1,24 @@
-import { faker } from "@faker-js/faker";
+import {faker} from '@faker-js/faker'
 
 export type GitHubPullRequestFaker = {
-  title: string,
-  merged_at: string | null,
+  title: string
+  merged_at: string | null
   head: {
-    ref: string,
+    ref: string
   }
 }
 
 export class GithubPullRequestMother {
-  static create(params?: Partial<GitHubPullRequestFaker>): GitHubPullRequestFaker {
+  static create(
+    params?: Partial<GitHubPullRequestFaker>
+  ): GitHubPullRequestFaker {
     return {
       title: faker.name.jobTitle(),
       merged_at: faker.datatype.datetime().toString(),
       head: {
-        ref: faker.git.branch(),
+        ref: faker.git.branch()
       },
       ...params
-    };
+    }
   }
 }

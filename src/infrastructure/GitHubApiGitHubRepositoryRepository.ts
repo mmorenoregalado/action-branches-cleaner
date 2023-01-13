@@ -63,12 +63,10 @@ export class GitHubApiGitHubRepositoryRepository
     branches: Branch[],
     pullRequests: GithubPullRequest[]
   ): Branch[] {
-      let prs = pullRequests
-        .filter(pull => pull.merged_at !== null)
+    const prs = pullRequests.filter(pull => pull.merged_at !== null)
     return branches.filter(branch => {
-
       const prFound = prs.find(pull => {
-        return pull.head.ref === branch.name;
+        return pull.head.ref === branch.name
       })
       return !!prFound
     })

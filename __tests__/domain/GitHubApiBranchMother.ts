@@ -1,5 +1,5 @@
-import { GitHubBranch } from "../../src/domain/GitHubBranch";
-import { faker } from "@faker-js/faker";
+import {GitHubBranch} from '../../src/domain/GitHubBranch'
+import {faker} from '@faker-js/faker'
 
 export class GitHubApiBranchMother {
   static create(params?: Partial<GitHubBranch>): GitHubBranch {
