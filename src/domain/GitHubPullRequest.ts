@@ -52,7 +52,7 @@ interface Self {
   href: string
 }
 
-interface Head {
+export interface Head {
   label: string
   ref: string
   sha: string
@@ -60,7 +60,7 @@ interface Head {
   repo: Repo
 }
 
-interface Repo {
+export interface Repo {
   id: number
   node_id: string
   name: string
@@ -150,7 +150,7 @@ interface License {
   node_id: string
 }
 
-interface User {
+export interface User {
   login: string
   id: number
   node_id: string

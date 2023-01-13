@@ -4,9 +4,9 @@ import { faker } from "@faker-js/faker";
 export class GitHubApiBranchMother {
   static create(params?: Partial<GitHubBranch>): GitHubBranch {
     return {
-      name: faker.random.word(),
+      name: faker.git.branch(),
       commit: {
-        sha: faker.datatype.hexadecimal(),
+        sha: faker.git.shortSha(),
         url: faker.internet.url()
       },
       protected: faker.datatype.boolean(),
