@@ -4,6 +4,7 @@ import {GitHubApiBranchMother} from '../domain/GitHubApiBranchMother'
 import {NockRepository} from './NockRepository'
 import {GithubPullRequestMother} from '../domain/GithubPullRequestMother'
 import {GithubPullRequest} from '../../src/domain/GitHubPullRequest'
+import nock from 'nock'
 
 const repository = new GitHubApiGitHubRepositoryRepository({
   token: config.github_token,
@@ -12,6 +13,9 @@ const repository = new GitHubApiGitHubRepositoryRepository({
 })
 
 describe('GitHubRepositoryRepository', () => {
+  beforeAll(() => {
+    nock.cleanAll()
+  })
   it('should get a branches list', async () => {
     const someBranch = GitHubApiBranchMother.create()
     NockRepository.sendGetRequestListBranches({

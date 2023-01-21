@@ -1,176 +1,6 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 5603:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GitHubApiGitHubRepositoryRepository = void 0;
-const github = __importStar(__nccwpck_require__(5438));
-class GitHubApiGitHubRepositoryRepository {
-    constructor({ token, ignoreBranches }) {
-        this.repo = github.context.repo.repo;
-        this.owner = github.context.repo.owner;
-        this.ignoreBranches = ignoreBranches;
-        this.gitHub = github.getOctokit(token);
-    }
-    branches() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { repo, owner } = this;
-            const { data } = yield this.gitHub.rest.repos.listBranches({ owner, repo });
-            return data.map(branch => ({ name: branch.name }));
-        });
-    }
-    mergedBranches(branches) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { owner, repo } = this;
-            return (yield Promise.all(branches.map((branch) => __awaiter(this, void 0, void 0, function* () {
-                const { data } = yield this.gitHub.rest.pulls.list({
-                    owner,
-                    repo,
-                    state: 'closed',
-                    base: branch.name
-                });
-                return data ? branch.name : null;
-            }))));
-        });
-    }
-    filterWithoutNullsAndIgnoredBranches(branches) {
-        return branches
-            .filter(branch => branch !== null)
-            .filter(branch => !this.ignoreBranches.includes(branch));
-    }
-    deleteBranches(branches) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const branchesToDelete = this.filterWithoutNullsAndIgnoredBranches(branches);
-            const { owner, repo } = this;
-            for (const branch of branchesToDelete) {
-                yield this.gitHub.rest.git.deleteRef({
-                    owner,
-                    repo,
-                    ref: `heads/${branch}`
-                });
-            }
-        });
-    }
-}
-exports.GitHubApiGitHubRepositoryRepository = GitHubApiGitHubRepositoryRepository;
-
-
-/***/ }),
-
-/***/ 3109:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(2186));
-const yaml = __importStar(__nccwpck_require__(1917));
-const GitHubApiGitHubRepositoryRepository_1 = __nccwpck_require__(5603);
-function run({ repository }) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const branches = yield repository.branches();
-            const mergedBranches = yield repository.mergedBranches(branches);
-            repository.deleteBranches(mergedBranches);
-        }
-        catch (error) {
-            if (error instanceof Error)
-                core.setFailed(error.message);
-        }
-    });
-}
-function ignoreBranches() {
-    const defaultBranches = ['master', 'main'];
-    try {
-        const customBranches = yaml.load(core.getInput('ignore_branches'));
-        if (!customBranches) {
-            return defaultBranches;
-        }
-        return [...defaultBranches, ...customBranches];
-    }
-    catch (error) {
-        if (error instanceof Error)
-            core.setFailed(error.message);
-        return defaultBranches;
-    }
-}
-const repository = new GitHubApiGitHubRepositoryRepository_1.GitHubApiGitHubRepositoryRepository({
-    token: core.getInput('GITHUB_TOKEN'),
-    ignoreBranches: ignoreBranches()
-});
-run({ repository });
-
-
-/***/ }),
-
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -4719,6 +4549,125 @@ class Deprecation extends Error {
 }
 
 exports.Deprecation = Deprecation;
+
+
+/***/ }),
+
+/***/ 2437:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const fs = __nccwpck_require__(7147)
+const path = __nccwpck_require__(1017)
+const os = __nccwpck_require__(2037)
+const packageJson = __nccwpck_require__(9968)
+
+const version = packageJson.version
+
+const LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg
+
+// Parser src into an Object
+function parse (src) {
+  const obj = {}
+
+  // Convert buffer to string
+  let lines = src.toString()
+
+  // Convert line breaks to same format
+  lines = lines.replace(/\r\n?/mg, '\n')
+
+  let match
+  while ((match = LINE.exec(lines)) != null) {
+    const key = match[1]
+
+    // Default undefined or null to empty string
+    let value = (match[2] || '')
+
+    // Remove whitespace
+    value = value.trim()
+
+    // Check if double quoted
+    const maybeQuote = value[0]
+
+    // Remove surrounding quotes
+    value = value.replace(/^(['"`])([\s\S]*)\1$/mg, '$2')
+
+    // Expand newlines if double quoted
+    if (maybeQuote === '"') {
+      value = value.replace(/\\n/g, '\n')
+      value = value.replace(/\\r/g, '\r')
+    }
+
+    // Add to object
+    obj[key] = value
+  }
+
+  return obj
+}
+
+function _log (message) {
+  console.log(`[dotenv@${version}][DEBUG] ${message}`)
+}
+
+function _resolveHome (envPath) {
+  return envPath[0] === '~' ? path.join(os.homedir(), envPath.slice(1)) : envPath
+}
+
+// Populates process.env from .env file
+function config (options) {
+  let dotenvPath = path.resolve(process.cwd(), '.env')
+  let encoding = 'utf8'
+  const debug = Boolean(options && options.debug)
+  const override = Boolean(options && options.override)
+
+  if (options) {
+    if (options.path != null) {
+      dotenvPath = _resolveHome(options.path)
+    }
+    if (options.encoding != null) {
+      encoding = options.encoding
+    }
+  }
+
+  try {
+    // Specifying an encoding returns a string instead of a buffer
+    const parsed = DotenvModule.parse(fs.readFileSync(dotenvPath, { encoding }))
+
+    Object.keys(parsed).forEach(function (key) {
+      if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
+        process.env[key] = parsed[key]
+      } else {
+        if (override === true) {
+          process.env[key] = parsed[key]
+        }
+
+        if (debug) {
+          if (override === true) {
+            _log(`"${key}" is already defined in \`process.env\` and WAS overwritten`)
+          } else {
+            _log(`"${key}" is already defined in \`process.env\` and was NOT overwritten`)
+          }
+        }
+      }
+    })
+
+    return { parsed }
+  } catch (e) {
+    if (debug) {
+      _log(`Failed to load ${dotenvPath} ${e.message}`)
+    }
+
+    return { error: e }
+  }
+}
+
+const DotenvModule = {
+  config,
+  parse
+}
+
+module.exports.config = DotenvModule.config
+module.exports.parse = DotenvModule.parse
+module.exports = DotenvModule
 
 
 /***/ }),
@@ -13785,6 +13734,246 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 3729:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.config = void 0;
+const dotenv_1 = __importDefault(__nccwpck_require__(2437));
+dotenv_1.default.config();
+exports.config = {
+    github_token: process.env.GITHUB_TOKEN,
+    repo: process.env.REPOSITORY_NAME,
+    owner: process.env.REPOSITORY_OWNER
+};
+
+
+/***/ }),
+
+/***/ 3665:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CleanerBranches = void 0;
+class CleanerBranches {
+    constructor(repository) {
+        this.repository = repository;
+    }
+    run({ ignoredBranches }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const branches = yield this.repository.branches();
+            const pullRequests = yield this.repository.listPullRequests();
+            const mergedBranches = this.repository.mergedBranches(branches, pullRequests);
+            const filteredBranches = this.filterWithoutNullsAndIgnoredBranches(mergedBranches, ignoredBranches);
+            return this.repository.deleteBranches(filteredBranches);
+        });
+    }
+    filterWithoutNullsAndIgnoredBranches(branches, ignoredBranches) {
+        return branches.filter(branch => !ignoredBranches.includes(branch.name));
+    }
+}
+exports.CleanerBranches = CleanerBranches;
+
+
+/***/ }),
+
+/***/ 3913:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GitHubApiGitHubRepositoryRepository = void 0;
+const github = __importStar(__nccwpck_require__(5438));
+class GitHubApiGitHubRepositoryRepository {
+    constructor({ token, repo, owner }) {
+        this.repo = repo;
+        this.owner = owner;
+        this.gitHub = github.getOctokit(token);
+    }
+    branches() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { repo, owner } = this;
+            const { data } = yield this.gitHub.rest.repos.listBranches({
+                owner,
+                repo,
+                protected: false
+            });
+            return data.map(branch => ({ name: branch.name }));
+        });
+    }
+    listPullRequests() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { repo, owner } = this;
+            const { data } = yield this.gitHub.rest.pulls.list({
+                owner,
+                repo,
+                state: 'closed',
+                base: 'main',
+                sort: 'updated',
+                direction: 'desc'
+            });
+            return data;
+        });
+    }
+    deleteBranches(branches) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { owner, repo } = this;
+            for (const branch of branches) {
+                yield this.gitHub.rest.git.deleteRef({
+                    owner,
+                    repo,
+                    ref: `heads/${branch}`
+                });
+            }
+        });
+    }
+    mergedBranches(branches, pullRequests) {
+        const prs = pullRequests.filter(pull => pull.merged_at !== null);
+        return branches.filter(branch => {
+            const prFound = prs.find(pull => {
+                return pull.head.ref === branch.name;
+            });
+            return !!prFound;
+        });
+    }
+}
+exports.GitHubApiGitHubRepositoryRepository = GitHubApiGitHubRepositoryRepository;
+
+
+/***/ }),
+
+/***/ 399:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const yaml = __importStar(__nccwpck_require__(1917));
+const github = __importStar(__nccwpck_require__(5438));
+const GitHubApiGitHubRepositoryRepository_1 = __nccwpck_require__(3913);
+const CleanerBranches_1 = __nccwpck_require__(3665);
+const action_config_1 = __nccwpck_require__(3729);
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const repository = new GitHubApiGitHubRepositoryRepository_1.GitHubApiGitHubRepositoryRepository({
+                token: core.getInput('GITHUB_TOKEN') || action_config_1.config.github_token,
+                repo: github.context.repo.repo || action_config_1.config.repo,
+                owner: github.context.repo.owner || action_config_1.config.owner
+            });
+            const cleaner = new CleanerBranches_1.CleanerBranches(repository);
+            cleaner.run({ ignoredBranches: ignoreBranches() });
+        }
+        catch (error) {
+            if (error instanceof Error)
+                core.setFailed(error.message);
+        }
+    });
+}
+exports.run = run;
+function ignoreBranches() {
+    const defaultBranches = ['master', 'main'];
+    try {
+        const customBranches = yaml.load(core.getInput('ignore_branches'));
+        if (!customBranches) {
+            return defaultBranches;
+        }
+        return [...defaultBranches, ...customBranches];
+    }
+    catch (error) {
+        if (error instanceof Error)
+            core.setFailed(error.message);
+        return defaultBranches;
+    }
+}
+run();
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -13913,6 +14102,14 @@ module.exports = require("zlib");
 
 /***/ }),
 
+/***/ 9968:
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('{"name":"dotenv","version":"16.0.3","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"require":"./lib/main.js","types":"./lib/main.d.ts","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","lint-readme":"standard-markdown","pretest":"npm run lint && npm run dts-check","test":"tap tests/*.js --100 -Rspec","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@types/node":"^17.0.9","decache":"^4.6.1","dtslint":"^3.7.0","sinon":"^12.0.1","standard":"^16.0.4","standard-markdown":"^7.1.0","standard-version":"^9.3.2","tap":"^15.1.6","tar":"^6.1.11","typescript":"^4.5.4"},"engines":{"node":">=12"}}');
+
+/***/ }),
+
 /***/ 1907:
 /***/ ((module) => {
 
@@ -13963,7 +14160,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(3109);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(399);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()

@@ -6,7 +6,7 @@ import {GitHubApiGitHubRepositoryRepository} from './infrastructure/GitHubApiGit
 import {CleanerBranches} from './application/CleanerBranches'
 import {config} from './action_config'
 
-async function run(): Promise<void> {
+export async function run(): Promise<void> {
   try {
     const repository = new GitHubApiGitHubRepositoryRepository({
       token: core.getInput('GITHUB_TOKEN') || config.github_token,

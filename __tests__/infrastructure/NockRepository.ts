@@ -29,4 +29,8 @@ export class NockRepository {
     const url = `${uriRepoBase}/pulls?state=closed&base=main&sort=updated&direction=desc`
     nock(urlApi).get(url).reply(statusCode, response)
   }
+
+  static sendDeletePullRequestList(): void {
+    nock(urlApi).delete(/.*/).reply(200)
+  }
 }
