@@ -21,7 +21,28 @@ main() {
     git checkout "$base_branch"
 
     # Eliminar ramas fusionadas
-    git branch --merged | grep -v "\* $base_branch" | xargs -r git branch -d
+    merged_branches=$(git branch --merged)
+    branches_to_delete=""
+
+    for branch in $merged_branches; do
+      branch=$(echo "$branch" | xargs) # Remove leading/trailing whitespaces
+      skip_branch=false
+      for protected_branch in "${BRANCHES[@]}"; do
+        if [[ $branch == *"$protected_branch"* ]]; then
+          skip_branch=true
+          break
+        fi
+      done
+      if [[ $skip_branch == false ]] && [[ $branch != *"*"* ]]; then
+        branches_to_delete+="$branch "
+      fi
+    done
+
+    if [ -n "$branches_to_delete" ]; then
+      echo "Branches to delete: $branches_to_delete"
+    else
+      echo "No branches to delete."
+    fi
 
     # Eliminar ramas inactivas según el umbral definido
     for branch in $(git for-each-ref --format='%(refname:short)' refs/heads); do
@@ -34,5 +55,4 @@ main() {
       fi
     done
   done
-
 }

@@ -10,15 +10,13 @@ inputs:
     description: 'Age threshold in days to delete inactive branches'
     required: true
     default: '7'
+  token:
+    description: 'GitHub token for authentication'
+    required: true
 
 runs:
   using: 'composite'
   steps:
-    - name: 'Configure Git'
-      shell: 'bash'
-      run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
     - name: 'Delete branches'
       shell: 'bash'
       run: |

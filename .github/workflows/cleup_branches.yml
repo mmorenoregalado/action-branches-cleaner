@@ -4,9 +4,7 @@ on:
   schedule:
     - cron: "0 0 * * *" # Run daily at 00:00 UTC
   # Opcionalmente, puedes agregar un evento push para probarlo más fácilmente
-  push:
-    branches:
-      - main
+  pull_request:
 
 jobs:
   cleanup_branches:
@@ -19,6 +17,6 @@ jobs:
       - name: Run Branch Cleaner
         uses: ./
         with:
-          base_branches: 'main,master,develop'
+          base_branches: 'main'
           days_old_threshold: 7
           token: ${{ secrets.GITHUB_TOKEN }}
