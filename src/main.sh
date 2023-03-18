@@ -26,7 +26,14 @@ main() {
 
     for branch in $merged_branches; do
       branch=$(echo "$branch" | xargs) # Remove leading/trailing whitespaces
-      if [[ $branch != *"*"* ]] && [[ $branch != *main* ]] && [[ $branch != *develop* ]]; then
+      skip_branch=false
+      for protected_branch in "${BRANCHES[@]}"; do
+        if [[ $branch == *"$protected_branch"* ]]; then
+          skip_branch=true
+          break
+        fi
+      done
+      if [[ $skip_branch == false ]] && [[ $branch != *"*"* ]]; then
         branches_to_delete+="$branch "
       fi
     done
@@ -36,7 +43,6 @@ main() {
     else
       echo "No branches to delete."
     fi
-
 
     # Eliminar ramas inactivas según el umbral definido
     for branch in $(git for-each-ref --format='%(refname:short)' refs/heads); do
@@ -49,5 +55,4 @@ main() {
       fi
     done
   done
-
 }
