@@ -1,0 +1,24 @@
+name: Clean Up Branches
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Run daily at 00:00 UTC
+  # Opcionalmente, puedes agregar un evento push para probarlo más fácilmente
+  push:
+    branches:
+      - main
+
+jobs:
+  cleanup_branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Branch Cleaner
+        uses: ./
+        with:
+          base_branches: 'main,master,develop'
+          days_old_threshold: 7
+          token: ${{ secrets.GITHUB_TOKEN }}
