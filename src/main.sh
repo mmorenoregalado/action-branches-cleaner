@@ -25,7 +25,7 @@ main() {
     branches_to_delete=""
 
     for branch in $merged_branches; do
-      if [[ $branch != *main* ]] && [[ $branch != *master* ]] && [[ $branch != *develop* ]]; then
+      if [[ $branch != *main* ]] && [[ $branch != *master* ]] && [[ $branch != *develop* ]] && [[ $branch != *' '* ]]; then
         branches_to_delete+="$branch "
       fi
     done
