@@ -1,12 +1,25 @@
-name: 'Merged branches cleaner'
-description: 'Removes all the branches that were already merged'
-author: 'Miguel Angel Moreno Regalado'
+name: 'GitHub Branch Cleaner'
+description: 'Deletes merged branches and inactive branches in a GitHub repository'
+author: 'Miguel Moreno mmorenoregalado@gmail.com'
+
 inputs:
-  GITHUB_TOKEN:
-    description: 'GitHub token'
+  base_branches:
+    description: 'Base branches separated by commas'
     required: true
-  ignore_branches:
-    description: 'Protect those branches that you dont want to be deleted'
+  days_old_threshold:
+    description: 'Age threshold in days to delete inactive branches'
+    required: true
+    default: '7'
+
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - name: 'Configure Git'
+      shell: 'bash'
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+    - name: 'Delete branches'
+      shell: 'bash'
+      run: |
+        ./entrypoint.sh "${{ inputs.base_branches }}" "${{ inputs.days_old_threshold }}" "${{ inputs.token }}"
