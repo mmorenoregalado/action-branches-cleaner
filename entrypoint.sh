@@ -1,6 +1,7 @@
 #!/bin/env bash
 set -euo pipefail
 
+
 BRANCHES_CLEANER_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 if [ "$BRANCHES_CLEANER_HOME" == "/" ]; then
