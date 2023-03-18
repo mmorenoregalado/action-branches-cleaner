@@ -1,5 +1,5 @@
 #!/bin/env bash
-set -euo pipefile
+set -euo pipefail
 
 BRANCHES_CLEANER_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
