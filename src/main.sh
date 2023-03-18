@@ -25,7 +25,8 @@ main() {
     branches_to_delete=""
 
     for branch in $merged_branches; do
-      if [[ $branch != *main* ]] && [[ $branch != *master* ]] && [[ $branch != *develop* ]] && [[ $branch != *' '* ]]; then
+      branch=$(echo "$branch" | xargs) # Remove leading/trailing whitespaces
+      if [[ $branch != *"*"* ]] && [[ $branch != *main* ]] && [[ $branch != *develop* ]]; then
         branches_to_delete+="$branch "
       fi
     done

@@ -17,6 +17,6 @@ jobs:
       - name: Run Branch Cleaner
         uses: ./
         with:
-          base_branches: 'main,master,develop'
+          base_branches: 'main'
           days_old_threshold: 7
           token: ${{ secrets.GITHUB_TOKEN }}
