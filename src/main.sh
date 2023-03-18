@@ -21,7 +21,7 @@ main() {
     git checkout "$base_branch"
 
     # Eliminar ramas fusionadas
-    git branch --merged | grep -v "\* $base_branch" | xargs -r git branch -d -v
+    git branch --merged | grep -v "\* $base_branch" | xargs -r echo "Branches to delete:"
 
     # Eliminar ramas inactivas según el umbral definido
     for branch in $(git for-each-ref --format='%(refname:short)' refs/heads); do
