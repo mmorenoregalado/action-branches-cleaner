@@ -21,7 +21,7 @@ main() {
     git checkout "$base_branch"
 
     # Eliminar ramas fusionadas
-    merged_branches=$(git branch --merged | grep -v "\*" | xargs || true)
+    merged_branches=$(git branch -r --merged "origin/$base_branch" | grep -v "origin/$base_branch" | sed 's/origin\///' | xargs || true)
 
     if [ -n "$merged_branches" ]; then
       # Eliminar ramas base del resultado
