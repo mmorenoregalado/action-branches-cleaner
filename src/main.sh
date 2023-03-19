@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/bin/env bash
 
 # Importar funciones de github.sh
 source "$BRANCHES_CLEANER_HOME"/src/github.sh
+# Importar funciones de cleanup.sh
+source "$BRANCHES_CLEANER_HOME"/src/cleanup.sh
 
 main() {
   BASE_BRANCHES_STR=$1
@@ -16,31 +18,20 @@ main() {
   IFS=',' read -ra BASE_BRANCHES <<<"$BASE_BRANCHES_STR"
 
   # Get closed PRs (both merged and not merged)
-  closed_prs=$(get_closed_prs)
+  closed_prs=$(github::get_closed_prs)
 
   # Get merged PRs
-  merged_prs=$(get_merged_prs)
+  merged_prs=$(github::get_merged_prs)
 
   # Find closed PRs that are not merged
   not_merged_prs=$(comm -23 <(echo "$closed_prs" | sort) <(echo "$merged_prs" | sort))
 
   for base_branch in "${BASE_BRANCHES[@]}"; do
-    # Loop through branches and delete them
-    for branch in $merged_prs; do
-      if [ "$branch" != "$base_branch" ]; then
-        echo "Deleting merged branch: $branch"
-        # Delete merged branch
-        delete_branch "$branch"
-      fi
-    done
 
-    # Loop through not merged branches and delete them (if necessary)
-    for branch in $not_merged_prs; do
-      if [ "$branch" != "$base_branch" ]; then
-        echo "Deleting not merged branch: $branch"
-        # Delete not merged branch
-        delete_branch "$branch"
-      fi
-    done
+    # Delete merged branches
+    github::delete_merged_branches "$merged_prs" "$base_branch"
+
+    # Delete unmerged branches
+    github::delete_unmerged_branches "$not_merged_prs" "$base_branch"
   done
 }
