@@ -1,8 +1,8 @@
 # Branches Cleaner Github Action
 
-<div style="display: flex; justify-content: center; align-items: center;">
-    <img src="assets/branche_cleaner.svg" alt="github action icon" width="150px" height="150px">
-</div>
+<p align="center">
+    <img src="assets/branche_cleaner.svg" alt="github action icon" width="250px" height="250px">
+</p>
 
 
 This Github Action automatically deletes merged or unmerged branches in a repository. You can specify the base branches or protected branches that should not be deleted.
