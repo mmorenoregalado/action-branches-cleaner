@@ -15,9 +15,9 @@ main() {
     if [ "$branch" != "$BASE_BRANCHES" ]; then
       is_merged=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
         "https://api.github.com/repos/$GITHUB_REPOSITORY/compare/$BASE_BRANCHES...$branch" | \
-        jq -r '.merged')
+        jq -r '.merge_commit_sha')
 
-      if [ "$is_merged" == "true" ]; then
+      if [ "$is_merged" != "null" ]; then
         echo "Deleting merged branch: $branch"
         # Delete merged branch
         curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
