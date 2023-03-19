@@ -1,7 +1,7 @@
 name: 'GitHub Branch Cleaner'
 description: 'Deletes merged branches and inactive branches in a GitHub repository'
 branding:
-  icon: "./assets/branche_cleaner.svg"
+  icon: ./assets/branche_cleaner.svg
 author: 'Miguel Moreno mmorenoregalado@gmail.com'
 
 inputs:
