@@ -1,21 +1,25 @@
 #!/bin/bash
 
+# Importar funciones de github.sh
+source "$BRANCHES_CLEANER_HOME"/src/github.sh
+
 main() {
   BASE_BRANCHES_STR=$1
   GITHUB_TOKEN=$3
+
+  GITHUB_API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY"
+
+  export GITHUB_TOKEN
+  export GITHUB_API_URL
 
   # Convert BASE_BRANCHES string to array
   IFS=',' read -ra BASE_BRANCHES <<<"$BASE_BRANCHES_STR"
 
   # Get closed PRs (both merged and not merged)
-  closed_prs=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-    "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=closed" |
-    jq -r '.[] | .head.ref')
+  closed_prs=$(get_closed_prs)
 
   # Get merged PRs
-  merged_prs=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-    "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=closed" |
-    jq -r '.[] | select(.merged_at != null) | .head.ref')
+  merged_prs=$(get_merged_prs)
 
   # Find closed PRs that are not merged
   not_merged_prs=$(comm -23 <(echo "$closed_prs" | sort) <(echo "$merged_prs" | sort))
@@ -26,8 +30,7 @@ main() {
       if [ "$branch" != "$base_branch" ]; then
         echo "Deleting merged branch: $branch"
         # Delete merged branch
-        curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
-          "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/heads/$branch"
+        delete_branch "$branch"
       fi
     done
 
@@ -36,8 +39,7 @@ main() {
       if [ "$branch" != "$base_branch" ]; then
         echo "Deleting not merged branch: $branch"
         # Delete not merged branch
-        curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
-          "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/heads/$branch"
+        delete_branch "$branch"
       fi
     done
   done
