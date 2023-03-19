@@ -20,48 +20,25 @@ main() {
   for base_branch in "${BRANCHES[@]}"; do
     git checkout "$base_branch"
 
-    # Eliminar ramas fusionadas
     merged_branches=$(git branch -r --merged "origin/$base_branch" | grep -v "origin/$base_branch" | sed 's/origin\///' | xargs || true)
 
     if [ -n "$merged_branches" ]; then
-      # Eliminar ramas base del resultado
-      for b in "${BRANCHES[@]}"; do
-        merged_branches=$(echo "$merged_branches" | sed "s/\<$b\>//g")
-      done
-    fi
-
-    branches_to_delete=""
-
-    for branch in $merged_branches; do
-      branch=$(echo "$branch" | xargs) # Remove leading/trailing whitespaces
-      skip_branch=false
-      for protected_branch in "${BRANCHES[@]}"; do
-        if [[ $branch == *"$protected_branch"* ]]; then
-          skip_branch=true
-          break
-        fi
-      done
-      if [[ $skip_branch == false ]] && [[ $branch != *"*"* ]]; then
-        branches_to_delete+="$branch "
-      fi
-    done
-
-    if [ -n "$branches_to_delete" ]; then
-      echo "Branches to delete: $branches_to_delete"
-      for branch in $branches_to_delete; do
+      echo "Merged branches found: $merged_branches"
+      for branch in $merged_branches; do
+        echo "Deleting branch: $branch"
         git push origin --delete "$branch"
       done
     else
-      echo "No branches to delete."
+      echo "No merged branches found."
     fi
 
-    # Eliminar ramas inactivas según el umbral definido
     for branch in $(git for-each-ref --format='%(refname:short)' refs/heads); do
       last_commit_date=$(git show -s --format="%ct" "$branch")
       current_date=$(date +%s)
       days_since_last_commit=$(((current_date - last_commit_date) / 86400))
 
       if [ $days_since_last_commit -ge "$DAYS_OLD_THRESHOLD" ]; then
+        echo "Deleting inactive branch: $branch"
         git push origin --delete "$branch"
       fi
     done
