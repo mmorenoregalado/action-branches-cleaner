@@ -29,9 +29,9 @@ main() {
   for base_branch in "${BASE_BRANCHES[@]}"; do
 
     # Delete merged branches
-    github::delete_merged_branches "$merged_prs" "$base_branch"
+    cleanup::delete_merged_branches "$merged_prs" "$base_branch"
 
     # Delete unmerged branches
-    github::delete_unmerged_branches "$not_merged_prs" "$base_branch"
+    cleanup::delete_unmerged_branches "$not_merged_prs" "$base_branch"
   done
 }
