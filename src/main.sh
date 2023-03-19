@@ -21,7 +21,7 @@ main() {
     git checkout "$base_branch"
 
     # Eliminar ramas fusionadas
-    merged_branches=$(git branch --merged)
+    merged_branches=$(git branch --merged | grep -v "\*" | xargs)
     branches_to_delete=""
 
     for branch in $merged_branches; do
