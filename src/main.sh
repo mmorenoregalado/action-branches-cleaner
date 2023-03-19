@@ -22,11 +22,15 @@ main() {
 
     # Eliminar ramas fusionadas
     merged_branches=$(git branch --merged | grep -v "\*" | xargs)
-    # Eliminar ramas base del resultado
-    for b in "${BRANCHES[@]}"; do
-      # shellcheck disable=SC2001
-      merged_branches=$(echo "$merged_branches" | sed "s/\<$b\>//g")
-    done
+
+    if [ -n "$merged_branches" ]; then
+      # Eliminar ramas base del resultado
+      for b in "${BRANCHES[@]}"; do
+        # shellcheck disable=SC2001
+        merged_branches=$(echo "$merged_branches" | sed "s/\<$b\>//g")
+      done
+    fi
+
     branches_to_delete=""
 
     for branch in $merged_branches; do
