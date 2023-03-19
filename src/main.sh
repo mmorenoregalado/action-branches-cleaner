@@ -40,6 +40,9 @@ main() {
 
     if [ -n "$branches_to_delete" ]; then
       echo "Branches to delete: $branches_to_delete"
+      for branch in $branches_to_delete; do
+        git push origin --delete "$branch"
+      done
     else
       echo "No branches to delete."
     fi
