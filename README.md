@@ -4,8 +4,9 @@
     <img src="assets/branche_cleaner.svg" alt="github action icon" width="250px" height="250px">
 </p>
 
-
 This Github Action automatically deletes merged or unmerged branches in a repository. You can specify the base branches or protected branches that should not be deleted.
+
+<a href="https://www.buymeacoffee.com/mmoreno" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: auto !important;width: 100px !important;" ></a>
 
 ## Inputs
 ### `base_branches`
