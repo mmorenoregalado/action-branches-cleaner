@@ -21,12 +21,11 @@ main() {
     git checkout "$base_branch"
 
     # Eliminar ramas fusionadas
-    merged_branches=$(git branch --merged | grep -v "\*" | xargs)
+    merged_branches=$(git branch --merged | grep -v "\*" | xargs || true)
 
     if [ -n "$merged_branches" ]; then
       # Eliminar ramas base del resultado
       for b in "${BRANCHES[@]}"; do
-        # shellcheck disable=SC2001
         merged_branches=$(echo "$merged_branches" | sed "s/\<$b\>//g")
       done
     fi
