@@ -41,6 +41,21 @@ jobs:
 ````
 This example uses a schedule trigger to run the action every day at midnight. The base_branches input takes a comma-separated list of base branches or protected branches that should
 
+## Usage the latest version
+To use the latest version:
+1. Click on the following link http://bit.ly/3zgLxHf. This will redirect you to the official GitHub Action Page
+2. Then click on `Use latest version`:
+
+   <img src="assets/cleaner_latest.png" style="width:250px" alt="Click latest version"/>
+
+   
+3. Finally replace the text in the GitHub Action YAML file in your .git/workflows/ folder.
+
+   <img src="assets/cleaner_dialog.png" style="width:350px" alt="Copy content"/>
+
+
+With that you will have the latest version of Branches Cleaner installed.
+
 ## Contributing
 This action is open to contributions. If you find any issues or bugs, feel free to open an issue or pull request.
 
