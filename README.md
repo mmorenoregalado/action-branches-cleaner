@@ -32,8 +32,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Branches Cleaner
-        uses: your-username/branches-cleaner@v1
+      - name: GitHub Branch Cleaner
+        uses: mmorenoregalado/action-branches-cleaner@v1.1.2
         with:
           base_branches: develop,master
           github_token: ${{ secrets.GITHUB_TOKEN }}
