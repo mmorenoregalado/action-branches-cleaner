@@ -1,12 +1,11 @@
 #!/bin/env bash
 
-# Importar funciones de github.sh
 source "$BRANCHES_CLEANER_HOME"/src/github.sh
-# Importar funciones de cleanup.sh
 source "$BRANCHES_CLEANER_HOME"/src/cleanup.sh
 
 main() {
   BASE_BRANCHES_STR=$1
+  DAYS_OLD_THRESHOLD=$2
   GITHUB_TOKEN=$3
 
   GITHUB_API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY"
@@ -27,4 +26,6 @@ main() {
   cleanup::delete_merged_branches "$merged_prs"
 
   cleanup::delete_unmerged_branches "$not_merged_prs"
+
+  cleanup::delete_inactive_branches "$DAYS_OLD_THRESHOLD"
 }

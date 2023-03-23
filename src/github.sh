@@ -24,7 +24,7 @@ github::delete_branch() {
 github::get_inactive_branches() {
   local days_inactive=$1
   local all_branches=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-      "$GITHUB_API_URL/repos/$repo_full_name/branches")
-  local cutoff=$(date --date="$days_inactive day ago" +%Y-%m-%dT%H:%M:%SZ)
-  echo "$all_branches" | jq -r --arg cutoff "$cutoff" '.[] | select(.commit.committer.date < $cutoff) | .name'
+    "$GITHUB_API_URL/git/refs/heads")
+  local cutoff=$(date --date="$days_inactive days ago" +"%Y-%m-%dT%H:%M:%SZ")
+  echo "$all_branches" | jq -r --arg cutoff "$cutoff" '.[] | select(.object.type == "commit") | select(.object.author.date < $cutoff) | .ref | "refs/heads/" + split("/")[-1]'
 }
