@@ -43,4 +43,5 @@ github::get_inactive_branches() {
   done
 
   echo "${inactive_branches[@]}"
+
 }

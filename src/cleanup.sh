@@ -13,6 +13,7 @@ cleanup::delete_unmerged_branches() {
   for branch in $not_merged_prs; do
     echo "Deleting not merged branch: $branch"
     github::delete_branch "$branch"
+
   done
 }
 
