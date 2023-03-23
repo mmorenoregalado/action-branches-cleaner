@@ -22,7 +22,6 @@ cleanup::delete_inactive_branches() {
 
   for branch in $inactive_branches; do
     echo "Deleting inactive branch: $branch"
-    # Delete inactive branch
     github::delete_branch "$branch"
   done
 }

@@ -21,10 +21,26 @@ github::delete_branch() {
   fi
 }
 
+github::get_branches() {
+  curl -s -H "Authorization: token $GITHUB_TOKEN" \
+    "$GITHUB_API_URL/branches?protected=false" |
+    jq -r '.[] | .name'
+}
+
 github::get_inactive_branches() {
   local days_inactive=$1
-  local all_branches=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-      "$GITHUB_API_URL/repos/$repo_full_name/branches")
+  local all_branches=$(github::get_branches)
   local cutoff=$(date --date="$days_inactive day ago" +%Y-%m-%dT%H:%M:%SZ)
-  echo "$all_branches" | jq -r --arg cutoff "$cutoff" '.[] | select(.commit.committer.date < $cutoff) | .name'
+
+  for branch in $all_branches; do
+    local branch_info=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+      "$GITHUB_API_URL/branches/$branch" |
+      jq -r --arg cutoff "$cutoff" '.[] | select(.commit.committer.date > $cutoff) | .name')
+
+    if [[ -n "$branch_info" ]]; then
+      inactive_branches+=("$branch_info")
+    fi
+  done
+
+  echo "${inactive_branches[@]}"
 }
