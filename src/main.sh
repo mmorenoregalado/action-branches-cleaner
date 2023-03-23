@@ -23,10 +23,8 @@ main() {
 
   for base_branch in "${BASE_BRANCHES[@]}"; do
 
-    # Delete merged branches
     cleanup::delete_merged_branches "$merged_prs" "$base_branch"
 
-    # Delete unmerged branches
     cleanup::delete_unmerged_branches "$not_merged_prs" "$base_branch"
 
     #Delete inactive branches
