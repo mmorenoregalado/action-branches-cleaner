@@ -14,6 +14,9 @@ github::get_merged_prs() {
 
 github::delete_branch() {
   local branch=$1
-  curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
-    "$GITHUB_API_URL/git/refs/heads/$branch"
+
+  if [[ " ${BASE_BRANCHES[*]} " != *" $branch "* ]]; then
+    curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+      "$GITHUB_API_URL/git/refs/heads/$branch"
+  fi
 }

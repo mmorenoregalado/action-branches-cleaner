@@ -16,16 +16,15 @@ main() {
 
   IFS=',' read -ra BASE_BRANCHES <<<"$BASE_BRANCHES_STR"
 
+  export BASE_BRANCHES
+
   closed_prs=$(github::get_closed_prs)
 
   merged_prs=$(github::get_merged_prs)
 
   not_merged_prs=$(comm -23 <(echo "$closed_prs" | sort) <(echo "$merged_prs" | sort))
 
-  for base_branch in "${BASE_BRANCHES[@]}"; do
+  cleanup::delete_merged_branches "$merged_prs"
 
-    cleanup::delete_merged_branches "$merged_prs" "$base_branch"
-
-    cleanup::delete_unmerged_branches "$not_merged_prs" "$base_branch"
-  done
+  cleanup::delete_unmerged_branches "$not_merged_prs"
 }
