@@ -13,5 +13,16 @@ cleanup::delete_unmerged_branches() {
   for branch in $not_merged_prs; do
     echo "Deleting not merged branch: $branch"
     github::delete_branch "$branch"
+
+  done
+}
+
+cleanup::delete_inactive_branches() {
+  local days_inactive=$1
+  local inactive_branches=$(github::get_inactive_branches "$days_inactive")
+
+  for branch in $inactive_branches; do
+    echo "Deleting inactive branch: $branch"
+    github::delete_branch "$branch"
   done
 }

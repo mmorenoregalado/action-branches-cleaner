@@ -17,5 +17,5 @@ jobs:
         uses: ./
         with:
           base_branches: 'main'
-          days_old_threshold: 7
+          days_old_threshold: 1
           token: ${{ secrets.GITHUB_TOKEN }}
