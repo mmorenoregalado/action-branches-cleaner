@@ -43,7 +43,7 @@ jobs:
           days_old_threshold: 7
 
 ````
-Refer to the [official GitHub documentation]("https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows") for more information on the different events that can be used to 
+Refer to the [official GitHub documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows) for more information on the different events that can be used to 
 trigger GitHub Actions.
 
 ## Usage the latest version
