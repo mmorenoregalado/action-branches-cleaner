@@ -4,7 +4,7 @@
     <img src="assets/branche_cleaner.svg" alt="github action icon" width="250px" height="250px">
 </p>
 
-This Github Action automatically deletes merged or unmerged branches in a repository. You can specify the base branches or protected branches that should not be deleted.
+This GitHub Action automatically cleans up branches in a repository, deleting closed branches without merges, merged branches, and inactive branches after a specified period in days. You can specify the base branches or protected branches that should not be deleted.
 
 <a href="https://www.buymeacoffee.com/mmoreno" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: auto !important;width: 100px !important;" ></a>
 
@@ -16,8 +16,11 @@ This Github Action automatically deletes merged or unmerged branches in a reposi
 ### `github_token`
 ***Required***. Token to authenticate with the GitHub API.
 
+### `days_old_threshold`
+***Optional***. Number of days of inactivity to remove inactive branches. Default is `7`.
+
 ## Usage
-To use the Branches Cleaner Github Action, add the following code to your Github Actions workflow:
+This GitHub Action can be triggered by different events offered by GitHub, depending on the needs of each team or individual. In the following example, a schedule trigger is used to run the action every day at midnight:
 
 ```` yaml
 name: Branches Cleaner
@@ -33,13 +36,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: GitHub Branch Cleaner
-        uses: mmorenoregalado/action-branches-cleaner@v1.1.2
+        uses: mmorenoregalado/action-branches-cleaner@v2.0.0
         with:
           base_branches: develop,master
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          days_old_threshold: 7
 
 ````
-This example uses a schedule trigger to run the action every day at midnight. The base_branches input takes a comma-separated list of base branches or protected branches that should
+Refer to the [official GitHub documentation]("https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows") for more information on the different events that can be used to 
+trigger GitHub Actions.
 
 ## Usage the latest version
 To use the latest version:
