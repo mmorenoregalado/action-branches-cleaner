@@ -36,7 +36,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: GitHub Branch Cleaner
-        uses: mmorenoregalado/action-branches-cleaner@v2.0.0
+        uses: mmorenoregalado/action-branches-cleaner@v2.0.1
         with:
           base_branches: develop,master
           github_token: ${{ secrets.GITHUB_TOKEN }}
