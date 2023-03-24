@@ -30,14 +30,14 @@ github::get_branches() {
 github::get_inactive_branches() {
   local days_inactive=$1
   local all_branches=$(github::get_branches)
-  local cutoff=$(date --date="$days_inactive day ago" +%Y-%m-%dT%H:%M:%SZ)
+  local date_limit=$(date --date="$days_inactive day ago" +%Y-%m-%dT%H:%M:%SZ)
 
   for branch in $all_branches; do
-    local branch_info=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+    local commit_date=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
       "$GITHUB_API_URL/branches/$branch" |
-      jq -r --arg cutoff "$cutoff" '.[] | select(.commit.committer.date > $cutoff) | .name')
+      jq -r '.commit.commit.committer.date')
 
-    if [[ -n "$branch_info" ]]; then
+    if [[ "$commit_date" = "$date_limit" ]]; then
       inactive_branches+=("$branch_info")
     fi
   done
