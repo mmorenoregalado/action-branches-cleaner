@@ -38,7 +38,7 @@ github::get_inactive_branches() {
       jq -r '.commit.commit.committer.date')
 
     if [[ $(date -d "$commit_date" +%s) -lt $(date -d "$date_limit" +%s) ]]; then
-      inactive_branches+=("$branch_info")
+      inactive_branches+=("$branch")
     fi
   done
 
