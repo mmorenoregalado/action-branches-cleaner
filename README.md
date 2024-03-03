@@ -1,4 +1,4 @@
-# Branches Cleaner Github Action
+# Branches Cleaner Github Action <a href="https://devhunt.org/tool/branches-cleaner" alt="upvote in devhunt">Upvote us in Devhunt_</a>
 
 <p align="center">
     <img src="assets/branche_cleaner.svg" alt="github action icon" width="250px" height="250px">
