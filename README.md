@@ -13,7 +13,7 @@ This GitHub Action automatically cleans up branches in a repository, deleting cl
 
 ***Required***. Comma-separated string of the base branches that you want to keep. For example: `main,develop`.
 
-### `github_token`
+### `token`
 ***Required***. Token to authenticate with the GitHub API.
 
 ### `days_old_threshold`
