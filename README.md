@@ -39,7 +39,7 @@ jobs:
         uses: mmorenoregalado/action-branches-cleaner@v2.0.1
         with:
           base_branches: develop,master
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           days_old_threshold: 7
 
 ````
