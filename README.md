@@ -46,6 +46,15 @@ jobs:
 Refer to the [official GitHub documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows) for more information on the different events that can be used to 
 trigger GitHub Actions.
 
+## Troubleshooting
+
+If you encounter an error with exit code 127 when running this action, it may be due to restrictions on workflow runs in your repository settings. To resolve this issue, please check if the action is allowed to run:
+
+1. Go to your repository's settings.
+2. Navigate to the "Actions" tab.
+3. Under "General" settings, look for "Workflow permissions".
+4. Make sure that the Read and write permissions option is selected, which allows workflows to have read and write permissions in the repository for all scopes.
+
 ## Usage the latest version
 To use the latest version:
 1. Click on the following link http://bit.ly/3zgLxHf. This will redirect you to the official GitHub Action Page
