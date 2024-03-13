@@ -22,5 +22,7 @@ runs:
   steps:
     - name: 'Delete branches'
       shell: 'bash'
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
       run: |
-        ./entrypoint.sh "${{ inputs.base_branches }}" "${{ inputs.days_old_threshold }}" "${{ inputs.token }}"
+        ${GITHUB_ACTION_PATH}/entrypoint.sh "${{ inputs.base_branches }}" "${{ inputs.days_old_threshold }}" "${{ inputs.token }}"
