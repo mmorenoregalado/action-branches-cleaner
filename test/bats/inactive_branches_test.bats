@@ -2,16 +2,16 @@
 
 load '../test_helper.bash'
 
-# Configuración para todas las pruebas
+# Setup for all tests
 setup() {
-  # Mock de github::get_branches
+  # Mock github::get_branches
   github::get_branches() {
     echo "feature/old"
     echo "feature/new"
     echo "main"
   }
 
-  # Mock de curl
+  # Mock curl
   curl() {
     if [[ $* == *"branches/feature/old"* ]]; then
       echo '{"commit": {"commit": {"committer": {"date": "2020-01-01T00:00:00Z"}}}}'
@@ -20,12 +20,12 @@ setup() {
     elif [[ $* == *"branches/main"* ]]; then
       echo '{"commit": {"commit": {"committer": {"date": "2023-01-11T00:00:00Z"}}}}'
     else
-      echo "Endpoint no esperado: $*" >&2
+      echo "Unexpected endpoint: $*" >&2
       echo '{}'
     fi
   }
 
-  # Mock de date
+  # Mock date
   date() {
     if [[ $* == *"--date="* ]]; then
       if [[ $* == *"--date=7 day ago"* ]]; then
@@ -56,8 +56,8 @@ setup() {
   export BASE_BRANCHES=("main")
 }
 
-@test "get_inactive_branches con umbral de 7 días" {
-  # Umbral de 7 días (solo feature/old debería ser inactiva)
+@test "get_inactive_branches with threshold of 7 days" {
+  # Threshold of 7 days (only feature/old should be inactive)
   run github::get_inactive_branches "7"
   
   # Verificaciones
@@ -65,8 +65,8 @@ setup() {
   [ "$output" = "feature/old" ]
 }
 
-@test "get_inactive_branches con umbral de 1 día" {
-  # Umbral de 1 día (feature/old y feature/new deberían ser inactivas)
+@test "get_inactive_branches with threshold of 1 day" {
+  # Threshold of 1 day (feature/old and feature/new should be inactive)
   run github::get_inactive_branches "1"
   
   # Verificaciones
@@ -74,11 +74,11 @@ setup() {
   [ "$output" = $'feature/old\nfeature/new' ]
 }
 
-@test "get_inactive_branches con umbral de 30 días" {
-  # Umbral de 30 días (solo feature/old debería ser inactiva)
+@test "get_inactive_branches with threshold of 30 days" {
+  # Threshold of 30 days (only feature/old should be inactive)
   run github::get_inactive_branches "30"
   
-  # Verificaciones
+  # Assertions
   [ "$status" -eq 0 ]
   [ "$output" = "feature/old" ]
 } 

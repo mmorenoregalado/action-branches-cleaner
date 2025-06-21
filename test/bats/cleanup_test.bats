@@ -2,71 +2,71 @@
 
 load '../test_helper.bash'
 
-# Configuración para todas las pruebas
+# Setup for all tests
 setup() {
-  # Cargar los scripts con el path correcto
+  # Load the scripts with the correct path
   source "${BATS_TEST_DIRNAME}/../../src/cleanup.sh"
   
-  # Mock de la función github::delete_branch
+  # Mock the github::delete_branch function
   github::delete_branch() {
     local branch=$1
     if [[ " ${BASE_BRANCHES[*]} " == *" $branch "* ]]; then
-      echo "PROTECTED: No se borra la rama base $branch"
+      echo "PROTECTED: Not deleting base branch $branch"
     else
-      echo "DELETED: Se ha borrado la rama $branch"
+      echo "DELETED: Branch $branch removed"
     fi
   }
   
-  # Mock de github::get_inactive_branches
+  # Mock github::get_inactive_branches
   github::get_inactive_branches() {
     local days=$1
     echo "feature/old"
     echo "feature/stale"
   }
   
-  # Variables de entorno necesarias
+  # Required environment variables
   export BASE_BRANCHES=("main" "develop")
 }
 
-@test "cleanup::delete_merged_branches elimina todas las ramas fusionadas" {
-  # Preparación de datos de prueba
+@test "cleanup::delete_merged_branches removes all merged branches" {
+  # Prepare test data
   local merged_branches=$'feature/merged1\nfeature/merged2\nmain'
   
-  # Ejecutar la función bajo prueba
+  # Run the function under test
   run cleanup::delete_merged_branches "$merged_branches"
   
-  # Verificaciones
+  # Assertions
   [ "$status" -eq 0 ]
   [[ "$output" == *"feature/merged1"* ]]
   [[ "$output" == *"feature/merged2"* ]]
-  [[ "$output" == *"DELETED: Se ha borrado la rama feature/merged1"* ]]
-  [[ "$output" == *"DELETED: Se ha borrado la rama feature/merged2"* ]]
-  [[ "$output" == *"PROTECTED: No se borra la rama base main"* ]]
+  [[ "$output" == *"DELETED: Branch feature/merged1 removed"* ]]
+  [[ "$output" == *"DELETED: Branch feature/merged2 removed"* ]]
+  [[ "$output" == *"PROTECTED: Not deleting base branch main"* ]]
 }
 
-@test "cleanup::delete_unmerged_branches elimina ramas cerradas sin fusionar" {
-  # Preparación de datos de prueba
+@test "cleanup::delete_unmerged_branches removes closed unmerged branches" {
+  # Prepare test data
   local unmerged_branches=$'feature/unmerged1\nfeature/unmerged2'
   
-  # Ejecutar la función bajo prueba
+  # Run the function under test
   run cleanup::delete_unmerged_branches "$unmerged_branches"
   
-  # Verificaciones
+  # Assertions
   [ "$status" -eq 0 ]
   [[ "$output" == *"feature/unmerged1"* ]]
   [[ "$output" == *"feature/unmerged2"* ]]
-  [[ "$output" == *"DELETED: Se ha borrado la rama feature/unmerged1"* ]]
-  [[ "$output" == *"DELETED: Se ha borrado la rama feature/unmerged2"* ]]
+  [[ "$output" == *"DELETED: Branch feature/unmerged1 removed"* ]]
+  [[ "$output" == *"DELETED: Branch feature/unmerged2 removed"* ]]
 }
 
-@test "cleanup::delete_inactive_branches elimina ramas inactivas" {
-  # Ejecutar la función bajo prueba
+@test "cleanup::delete_inactive_branches removes inactive branches" {
+  # Run the function under test
   run cleanup::delete_inactive_branches "7"
   
-  # Verificaciones
+  # Assertions
   [ "$status" -eq 0 ]
   [[ "$output" == *"feature/old"* ]]
   [[ "$output" == *"feature/stale"* ]]
-  [[ "$output" == *"DELETED: Se ha borrado la rama feature/old"* ]]
-  [[ "$output" == *"DELETED: Se ha borrado la rama feature/stale"* ]]
+  [[ "$output" == *"DELETED: Branch feature/old removed"* ]]
+  [[ "$output" == *"DELETED: Branch feature/stale removed"* ]]
 } 

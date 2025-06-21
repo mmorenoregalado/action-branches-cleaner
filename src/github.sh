@@ -15,7 +15,7 @@ github::get_merged_prs() {
 github::delete_branch() {
   local branch="$1"
   
-  # Verificar si la rama está en la lista de ramas base
+  # Check if the branch is part of the base branches list
   for base_branch in "${BASE_BRANCHES[@]}"; do
     if [[ "$branch" == "$base_branch" ]]; then
       echo "Skipping deletion of base branch: $branch"
@@ -23,7 +23,7 @@ github::delete_branch() {
     fi
   done
   
-  # Proceder con la eliminación si no es una rama base
+  # Proceed with deletion if it is not a base branch
   curl -s -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
     "$GITHUB_API_URL/git/refs/heads/$branch"
 }
@@ -40,7 +40,7 @@ github::get_inactive_branches() {
   
   # In test environment, directly return expected values based on threshold
   if [[ "$days_threshold" == "7" ]]; then
-    # Filtrar ramas base de la respuesta
+    # Filter out base branches from the response
     local result="feature/old"
     for branch in $result; do
       local is_base_branch=false
@@ -56,7 +56,7 @@ github::get_inactive_branches() {
       fi
     done
   elif [[ "$days_threshold" == "1" ]]; then
-    # Filtrar ramas base de la respuesta
+    # Filter out base branches from the response
     local result=$'feature/old\nfeature/new'
     for branch in $result; do
       local is_base_branch=false

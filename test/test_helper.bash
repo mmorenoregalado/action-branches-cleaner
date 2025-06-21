@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-# Helper para depuración y mensajes comunes
+# Helper for debugging and common messages
 debug() {
   if [ "${BATS_DEBUG:-0}" -eq 1 ]; then
     echo "DEBUG: $*" >&3
   fi
 }
 
-# Función auxiliar para comparar las salidas esperadas con las reales
+# Helper function to compare expected and actual output
 assert_output_contains() {
   local expected="$1"
   if [[ "$output" != *"$expected"* ]]; then
-    echo "La salida no contiene '$expected'" >&2
-    echo "Salida real: $output" >&2
+    echo "Output does not contain '$expected'" >&2
+    echo "Actual output: $output" >&2
     return 1
   fi
 }
@@ -20,23 +20,23 @@ assert_output_contains() {
 assert_output_not_contains() {
   local unexpected="$1"
   if [[ "$output" == *"$unexpected"* ]]; then
-    echo "La salida contiene '$unexpected' cuando no debería" >&2
-    echo "Salida real: $output" >&2
+    echo "Output contains '$unexpected' when it shouldn't" >&2
+    echo "Actual output: $output" >&2
     return 1
   fi
 }
 
-# Registrar información sobre el entorno de ejecución de pruebas
+# Log information about the test run environment
 setup_file() {
-  echo "Iniciando ejecución de pruebas con Bats en $(date)" >&3
-  echo "Sistema: $(uname -a)" >&3
+  echo "Starting Bats test run at $(date)" >&3
+  echo "System: $(uname -a)" >&3
 }
 
 teardown_file() {
-  echo "Finalizando ejecución de pruebas con Bats en $(date)" >&3
+  echo "Finishing Bats test run at $(date)" >&3
 }
 
-# Función para crear una estructura temporal para pruebas
+# Function to create a temporary structure for tests
 create_test_branches() {
   local repo_dir="$1"
   
@@ -47,12 +47,12 @@ create_test_branches() {
   git config --local user.email "test@example.com"
   git config --local user.name "Test User"
   
-  # Crear rama principal
+  # Create main branch
   echo "# Test Repository" > README.md
   git add README.md
   git commit -q -m "Initial commit"
   
-  # Crear ramificaciones para pruebas
+  # Create branches for tests
   git checkout -q -b feature/test1
   echo "Feature 1" > feature1.txt
   git add feature1.txt
@@ -66,7 +66,7 @@ create_test_branches() {
   git checkout -q master
 }
 
-# Limpiar después de las pruebas
+# Clean up after the tests
 cleanup_test_repo() {
   local repo_dir="$1"
   if [ -d "$repo_dir" ]; then

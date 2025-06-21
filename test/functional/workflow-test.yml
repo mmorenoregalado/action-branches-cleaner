@@ -77,18 +77,18 @@ jobs:
 
       - name: Verify results
         run: |
-          # Comprobar que la rama inactiva se ha eliminado
+          # Check that the inactive branch has been removed
           if git show-ref --verify --quiet refs/heads/feature/inactive; then
-            echo "La rama inactiva no se eliminó correctamente"
+            echo "Inactive branch was not removed correctly"
             exit 1
           else
-            echo "La rama inactiva se eliminó correctamente"
+            echo "Inactive branch removed successfully"
           fi
           
-          # Comprobar que la rama activa aún existe (no debería ser eliminada)
+          # Check that the active branch still exists (should not be deleted)
           if git show-ref --verify --quiet refs/heads/feature/active; then
-            echo "La rama activa sigue existiendo, como se esperaba"
+            echo "Active branch still exists as expected"
           else
-            echo "La rama activa se eliminó incorrectamente"
+            echo "Active branch was removed incorrectly"
             exit 1
           fi 

@@ -1,115 +1,115 @@
-# Pruebas para Branches Cleaner GitHub Action
+# Tests for Branches Cleaner GitHub Action
 
-Este directorio contiene las pruebas automatizadas para la GitHub Action "Branches Cleaner". La suite de pruebas incluye pruebas unitarias, de integración y funcionales para asegurar que la acción funcione correctamente.
+This directory contains the automated tests for the "Branches Cleaner" GitHub Action. The suite includes unit, integration and functional tests to ensure the action works correctly.
 
-## Estructura de Pruebas
+## Test Structure
 
 ```
 test/
-├── bats/                   # Pruebas unitarias con Bats
-│   ├── github_test.bats    # Pruebas para github.sh
-│   ├── cleanup_test.bats   # Pruebas para cleanup.sh
-│   ├── main_test.bats      # Pruebas para main.sh
-│   └── integration_test.bats # Pruebas de integración
-├── docker/                 # Pruebas de integración con Docker
-│   ├── Dockerfile.test     # Docker para ejecutar pruebas
-│   ├── docker-compose.yml  # Configuración de Docker Compose
-│   ├── mock_github_api.sh  # Mock de la API de GitHub
-│   └── run_tests.sh        # Script de ejecución de pruebas
-├── functional/             # Pruebas funcionales
-│   └── workflow-test.yml   # Flujo de trabajo de GitHub Actions
-├── test_helper.bash        # Funciones auxiliares para pruebas Bats
-├── inactive_branches_test.sh # Prueba específica para detección de ramas inactivas
-└── README.md               # Esta documentación
+├── bats/                   # Unit tests with Bats
+│   ├── github_test.bats    # Tests for github.sh
+│   ├── cleanup_test.bats   # Tests for cleanup.sh
+│   ├── main_test.bats      # Tests for main.sh
+│   └── integration_test.bats # Integration tests
+├── docker/                 # Integration tests using Docker
+│   ├── Dockerfile.test     # Docker file to run tests
+│   ├── docker-compose.yml  # Docker Compose configuration
+│   ├── mock_github_api.sh  # Mock GitHub API
+│   └── run_tests.sh        # Test execution script
+├── functional/             # Functional tests
+│   └── workflow-test.yml   # GitHub Actions workflow
+├── test_helper.bash        # Helper functions for Bats
+├── inactive_branches_test.sh # Specific test for inactive branch detection
+└── README.md               # This documentation
 ```
 
-## Tipos de Pruebas
+## Types of Tests
 
-### 1. Pruebas Unitarias (Bats)
+### 1. Unit Tests (Bats)
 
-Las pruebas unitarias utilizan [Bats (Bash Automated Testing System)](https://github.com/bats-core/bats-core) para probar cada función de manera aislada:
+The unit tests use [Bats (Bash Automated Testing System)](https://github.com/bats-core/bats-core) to test each function in isolation:
 
-- `github_test.bats`: Prueba las funciones en `github.sh` que interactúan con la API de GitHub.
-- `cleanup_test.bats`: Prueba las funciones en `cleanup.sh` para eliminar diferentes tipos de ramas.
-- `main_test.bats`: Prueba la lógica principal en `main.sh`.
-- `integration_test.bats`: Pruebas combinadas de los distintos módulos.
+- `github_test.bats`: Tests the functions in `github.sh` that interact with the GitHub API.
+- `cleanup_test.bats`: Tests the functions in `cleanup.sh` for deleting different types of branches.
+- `main_test.bats`: Tests the main logic in `main.sh`.
+- `integration_test.bats`: Combined tests across modules.
 
-### 2. Pruebas de Integración (Docker)
+### 2. Integration Tests (Docker)
 
-Las pruebas de integración utilizan Docker para simular un entorno cercano al de GitHub Actions:
+Integration tests use Docker to simulate an environment close to GitHub Actions:
 
-- `Dockerfile.test`: Configura un contenedor similar al entorno de GitHub Actions.
-- `mock_github_api.sh`: Simula las respuestas de la API de GitHub sin hacer llamadas reales.
-- `run_tests.sh`: Ejecuta varios escenarios de prueba dentro del contenedor.
+- `Dockerfile.test`: Sets up a container similar to the GitHub Actions environment.
+- `mock_github_api.sh`: Mocks GitHub API responses without real requests.
+- `run_tests.sh`: Executes different test scenarios inside the container.
 
-### 3. Pruebas Específicas
+### 3. Specific Tests
 
-- `inactive_branches_test.sh`: Prueba específica para la función `github::get_inactive_branches` que detecta ramas inactivas.
+- `inactive_branches_test.sh`: Specific test for the `github::get_inactive_branches` function that detects inactive branches.
 
-### 4. Pruebas Funcionales (GitHub Actions)
+### 4. Functional Tests (GitHub Actions)
 
-- `workflow-test.yml`: Define un flujo de trabajo de GitHub Actions para probar la acción en un entorno real.
+- `workflow-test.yml`: Defines a GitHub Actions workflow to test the action in a real environment.
 
-## Ejecución de Pruebas
+## Running the Tests
 
-### Pruebas Unitarias con Bats
+### Unit Tests with Bats
 
 ```bash
-# Instalar Bats (si no está instalado)
+# Install Bats (if not installed)
 sudo apt-get install bats
 
-# Ejecutar todas las pruebas Bats
+# Run all Bats tests
 bats test/bats
 
-# Ejecutar un archivo de prueba específico
+# Run a specific test file
 bats test/bats/github_test.bats
 ```
 
-### Pruebas de Integración con Docker
+### Integration Tests with Docker
 
 ```bash
-# Construir y ejecutar las pruebas con Docker Compose
+# Build and run the tests with Docker Compose
 cd test/docker
 docker-compose up --build
 ```
 
-### Prueba Específica de Ramas Inactivas
+### Specific Test for Inactive Branches
 
 ```bash
-# Ejecutar la prueba específica
+# Run the specific test
 chmod +x test/inactive_branches_test.sh
 ./test/inactive_branches_test.sh
 ```
 
-### Pruebas Funcionales en GitHub Actions
+### Functional Tests on GitHub Actions
 
-Las pruebas funcionales se ejecutan automáticamente en GitHub Actions cuando:
+Functional tests run automatically in GitHub Actions when:
 
-1. Se hace push a la rama `main`
-2. Se abre un pull request contra la rama `main`
+1. Pushing to the `main` branch
+2. Opening a pull request against the `main` branch
 
-## Flujo de Trabajo de CI
+## CI Workflow
 
-El proyecto incluye un flujo de trabajo de GitHub Actions para ejecutar todas las pruebas en integración continua. Consulte el archivo `.github/workflows/test.yml` para ver la configuración.
+The project includes a GitHub Actions workflow to run all tests in continuous integration. See `.github/workflows/test.yml` for details.
 
-## Contribuciones a las Pruebas
+## Contributing to the Tests
 
-Al contribuir con nuevas funcionalidades o correcciones a la acción, asegúrese de:
+When contributing new features or fixes to the action, be sure to:
 
-1. Añadir pruebas unitarias para las nuevas funciones o correcciones.
-2. Verificar que todas las pruebas pasen antes de enviar un pull request.
-3. Si es necesario, actualizar las pruebas existentes para reflejar cambios de comportamiento esperados.
+1. Add unit tests for new features or fixes.
+2. Verify that all tests pass before submitting a pull request.
+3. Update existing tests if necessary to reflect expected behavior changes.
 
-## Solución de Problemas
+## Troubleshooting
 
-Si las pruebas fallan:
+If the tests fail:
 
-1. Verifique que los mocks y stubs reflejen correctamente el comportamiento esperado.
-2. Compruebe que las funciones probadas no tengan efectos secundarios inesperados.
-3. Para pruebas de Docker, asegúrese de que la imagen se construya correctamente.
-4. Para pruebas funcionales con GitHub Actions, compruebe los permisos del token.
+1. Verify that mocks and stubs correctly reflect the expected behavior.
+2. Check that the tested functions do not have unexpected side effects.
+3. For Docker tests, ensure the image builds correctly.
+4. For functional tests with GitHub Actions, verify the token permissions.
 
-## Referencias
+## References
 
 - [Bats Testing Framework](https://github.com/bats-core/bats-core)
 - [ShellCheck](https://www.shellcheck.net/)

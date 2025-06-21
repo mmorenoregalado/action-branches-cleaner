@@ -2,20 +2,20 @@
 
 load '../test_helper.bash'
 
-# Configuración para todas las pruebas
+# Setup for all tests
 setup() {
-  # IMPORTANTE: Exportar primero las variables de entorno básicas
+  # IMPORTANT: export basic environment variables first
   export GITHUB_REPOSITORY="test-user/test-repo"
   export GITHUB_TOKEN="fake-token"
   export GITHUB_API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY"
   
-  # Cargar los scripts originales primero
+  # Load the original scripts first
   source "${BATS_TEST_DIRNAME}/../../src/github.sh"
   source "${BATS_TEST_DIRNAME}/../../src/cleanup.sh"
   source "${BATS_TEST_DIRNAME}/../../src/main.sh"
   
-  # Después, reemplazar las funciones con mocks
-  # Mock de las funciones de github.sh - REDEFINIRLAS después de cargar los originales
+  # Then replace the functions with mocks
+  # Mock functions from github.sh - redefine them after loading the originals
   github::get_closed_prs() {
     echo "feature/pr1"
     echo "feature/pr2"
@@ -54,25 +54,25 @@ setup() {
     echo "Mock delete_inactive_branches: $days"
   }
   
-  # Reescribir la definición de la función comm para simular el comportamiento
+  # Redefine the comm function to simulate behavior
   comm() {
     if [[ "$1" == "-23" ]]; then
       echo "feature/pr1"
       echo "feature/pr3"
     else
-      echo "Error: mock de comm no implementado para estos parámetros"
+      echo "Error: comm mock not implemented for these parameters"
     fi
   }
 }
 
-# Función para capturar la salida real al ejecutar main()
+# Function to capture the real output when running main()
 run_main_function() {
   local base_branches="$1"
   local days_threshold="$2"
   local token="$3"
 
-  # Necesitamos un override directo para el main()
-  # Esta versión mock de main() solo maneja las funciones mock, no las reales
+  # We need a direct override for main()
+  # This mock version of main() only handles the mocked functions, not the real ones
   main() {
     local BASE_BRANCHES_STR=$1
     local DAYS_OLD_THRESHOLD=$2
@@ -81,7 +81,7 @@ run_main_function() {
     IFS=',' read -ra BASE_BRANCHES <<<"$BASE_BRANCHES_STR"
     export BASE_BRANCHES
 
-    # Procesamiento simulado
+    # Simulated processing
     local merged_prs=$(github::get_merged_prs)
     local closed_prs=$(github::get_closed_prs)
     local not_merged_prs=$(comm -23 <(echo "$closed_prs" | sort) <(echo "$merged_prs" | sort))
@@ -92,24 +92,24 @@ run_main_function() {
     cleanup::delete_inactive_branches "$DAYS_OLD_THRESHOLD"
   }
 
-  # Ejecutar nuestra versión simulada de main
+  # Run our simulated version of main
   main "$base_branches" "$days_threshold" "$token"
 }
 
-@test "main procesa correctamente los parámetros" {
+@test "main processes parameters correctly" {
   run run_main_function "main,develop" "7" "fake-token"
   
-  # Verificaciones
+  # Assertions
   [ "$status" -eq 0 ]
   [[ "$output" == *"Mock delete_merged_branches: feature/pr2"* ]]
   [[ "$output" == *"Mock delete_unmerged_branches: feature/pr1"* ]]
   [[ "$output" == *"Mock delete_inactive_branches: 7"* ]]
 }
 
-@test "main calcula correctamente las ramas no fusionadas" {
+@test "main correctly calculates unmerged branches" {
   run run_main_function "main,develop" "7" "fake-token"
   
-  # Verificaciones
+  # Assertions
   [ "$status" -eq 0 ]
   [[ "$output" == *"Mock delete_unmerged_branches: feature/pr1"* ]]
   [[ "$output" == *"feature/pr3"* ]]

@@ -2,12 +2,12 @@
 
 load '../test_helper.bash'
 
-# Configuración para todas las pruebas
+# Setup for all tests
 setup() {
-  # Cargar los scripts con el path correcto
+  # Load the scripts using the correct path
   source "${BATS_TEST_DIRNAME}/../../src/github.sh"
   
-  # Mock de curl para evitar llamadas reales a la API
+  # Mock curl to avoid real API calls
   curl() {
     case "$*" in
       *"pulls?state=closed"*)
@@ -46,28 +46,28 @@ setup() {
     fi
   }
   
-  # Variables de entorno necesarias
+  # Required environment variables
   export GITHUB_TOKEN="fake-token"
   export GITHUB_API_URL="https://api.github.com/repos/user/repo"
   export BASE_BRANCHES=("main" "develop")
 }
 
-@test "github::get_closed_prs obtiene ramas de PRs cerrados" {
+@test "github::get_closed_prs retrieves closed PR branches" {
   result=$(github::get_closed_prs)
   expected=$'feature/test1\nfeature/test2'
   
-  echo "Resultado: '$result'"
-  echo "Esperado: '$expected'"
+  echo "Result: '$result'"
+  echo "Expected: '$expected'"
   
   [ "$result" = "$expected" ]
 }
 
-@test "github::get_merged_prs obtiene solo ramas de PRs fusionados" {
+@test "github::get_merged_prs retrieves only merged PR branches" {
   result=$(github::get_merged_prs)
   expected="feature/test2"
   
-  echo "Resultado: '$result'"
-  echo "Esperado: '$expected'"
+  echo "Result: '$result'"
+  echo "Expected: '$expected'"
   
   [ "$result" = "$expected" ]
 }
