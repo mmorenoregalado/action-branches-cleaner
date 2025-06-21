@@ -1,5 +1,17 @@
 #!/bin/env bash
 
+##
+# Determine the project root path. In the normal GitHub Action runtime this is
+# provided via the `BRANCHES_CLEANER_HOME` environment variable, but when the
+# scripts are sourced directly (e.g. during unit tests) this variable might not
+# be defined.  In that case fall back to resolving the path relative to this
+# file.
+##
+
+if [ -z "${BRANCHES_CLEANER_HOME:-}" ]; then
+  BRANCHES_CLEANER_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null 2>&1 && pwd)"
+fi
+
 source "$BRANCHES_CLEANER_HOME"/src/github.sh
 source "$BRANCHES_CLEANER_HOME"/src/cleanup.sh
 
